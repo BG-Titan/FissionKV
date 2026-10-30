@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64", "pybind11>=2.12"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fissionkv"
+version = "0.1.0"
+description = "Strata-inspired tiered (pinned host) + elastic (VMM) KV cache for vLLM, as an external connector module"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+# No hard torch/vllm deps: this package must import inside a vLLM process
+# (which provides both) and stay unit-testable without them.
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.entry-points."vllm.general_plugins"]
+fissionkv = "fissionkv.plugin:load"
+
+[tool.setuptools]
+packages = ["fissionkv"]
+
+[tool.setuptools.package-data]
+fissionkv = ["*.so", "*.pyi"]
